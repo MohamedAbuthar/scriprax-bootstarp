@@ -1,0 +1,131 @@
+services:
+  nginx-dev:
+    container_name: nginx
+    image: nginx:latest
+    platform: linux/amd64
+    environment:
+      APP1_BACKEND: http://app1_backend:5000
+      APP1_FRONTEND: http://app1_frontend:3000
+      APP2_FRONTEND: http://app2_frontend:4000
+    volumes:
+      - ./services/predefined/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+      - ./services/predefined/nginx/ssl:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app1_backend
+      - app1_frontend
+      - app2_frontend
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17
+    platform: linux/amd64
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Strong_P@ssw0rd_2025!
+      POSTGRES_DB: postgres
+    command: 
+      - -N 1000
+    volumes:
+      - ./services/.nogit/rendered/db/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app1_backend:
+    container_name: app1_backend
+    image: your-registry/app1-backend:latest  # Replace with your backend image
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      # Database Configuration
+      DATABASE_URL: "postgresql://app1_user:App1_P@ssw0rd_2025!@postgres:5432/app1_db"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: app1_user
+      DB_PASSWORD: App1_P@ssw0rd_2025!
+      DB_NAME: app1_db
+      
+      # Application Configuration
+      NODE_ENV: production
+      CORS_ORIGIN: "https://yourdomain.com"
+      PORT: 5000
+      JWT_SECRET: "your_jwt_secret_here"
+      
+      # Add your other environment variables here
+      # API_KEY: "your_api_key"
+      # THIRD_PARTY_URL: "https://api.example.com"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  app1_frontend:
+    container_name: app1_frontend
+    image: your-registry/app1-frontend:latest  # Replace with your frontend image
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      # Frontend Configuration
+      NODE_ENV: production
+      NEXT_PUBLIC_BASE_URL: https://yourdomain.com  # Replace with your domain
+      NEXTAUTH_URL: https://yourdomain.com
+      NEXTAUTH_URL_INTERNAL: http://app1_frontend:3000
+      NEXTAUTH_TRUST_HOST: "true"
+      NEXTAUTH_SECRET: your_nextauth_secret_here
+      
+      # API Configuration
+      REACT_APP_API_URL: https://yourdomain.com/api
+      REACT_APP_BACKEND_URL: https://yourdomain.com/api
+      PORT: 3000
+      
+      # Add your other frontend environment variables here
+      # REACT_APP_GOOGLE_MAPS_KEY: "your_google_maps_key"
+      # REACT_APP_STRIPE_KEY: "your_stripe_key"
+    depends_on:
+      - app1_backend
+    restart: unless-stopped
+
+  app2_frontend:
+    container_name: app2_frontend
+    image: your-registry/app2-frontend:latest  # Replace with your second frontend image
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:4000:4000"
+    environment:
+      # Frontend Configuration
+      NODE_ENV: production
+      NEXT_PUBLIC_BASE_URL: https://app2.yourdomain.com  # Replace with your subdomain
+      PORT: 4000
+      
+      # API Configuration - points to the same backend
+      REACT_APP_API_URL: https://yourdomain.com/api
+      REACT_APP_BACKEND_URL: https://yourdomain.com/api
+      
+      # Add your other frontend environment variables here
+      # REACT_APP_FEATURE_FLAGS: "feature1,feature2"
+    depends_on:
+      - app1_backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
