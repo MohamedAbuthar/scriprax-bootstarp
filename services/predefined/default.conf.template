@@ -1,27 +1,27 @@
-# Main Domain - HTTP to HTTPS redirect
+# Main Domain (api.sciprax.com) - HTTP to HTTPS redirect
 server {
     listen 80;
-    server_name yourdomain.com;  # Replace with your domain
+    server_name api.sciprax.com;
     
     location / {
         return 301 https://$host$request_uri;
     }
 }
 
-# App2 Subdomain - HTTP to HTTPS redirect
+# Admin Subdomain (admin.sciprax.com) - HTTP to HTTPS redirect
 server {
     listen 80;
-    server_name app2.yourdomain.com;  # Replace with your subdomain
+    server_name admin.sciprax.com;
     
     location / {
         return 301 https://$host$request_uri;
     }
 }
 
-# Main Application - HTTPS (Frontend 1 + Backend)
+# Main Application - HTTPS (api.sciprax.com - Frontend 1 + Backend)
 server {
     listen 443 ssl;
-    server_name yourdomain.com;  # Replace with your domain
+    server_name api.sciprax.com;
     
     ssl_certificate /etc/nginx/ssl/main.crt;
     ssl_certificate_key /etc/nginx/ssl/main.key;
@@ -128,10 +128,10 @@ server {
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none';";
 }
 
-# Second Frontend - HTTPS (App2 on subdomain)
+# Admin Dashboard - HTTPS (admin.sciprax.com)
 server {
     listen 443 ssl;
-    server_name app2.yourdomain.com;  # Replace with your subdomain
+    server_name admin.sciprax.com;
 
     # Use the same SSL certificates (if multi-domain certificate)
     ssl_certificate /etc/nginx/ssl/main.crt;
@@ -185,7 +185,7 @@ server {
         add_header X-XSS-Protection "1; mode=block";
     }
 
-    # App2 Frontend application (default route)
+    # Admin Dashboard Frontend (default route)
     location / {
         proxy_pass ${APP2_FRONTEND};
         proxy_http_version 1.1;
