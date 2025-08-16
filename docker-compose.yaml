@@ -44,6 +44,8 @@ services:
     container_name: app1_backend
     image: ghcr.io/kasimmz/child-info:latest
     platform: linux/amd64
+    working_dir: /app
+    command: ["node", "server.js"]
     ports:
       - "127.0.0.1:5000:5000"
     environment:
@@ -68,6 +70,11 @@ services:
       postgres:
         condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   app1_frontend:
     container_name: app1_frontend
