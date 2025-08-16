@@ -27,8 +27,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Strong_P@ssw0rd_2025!
       POSTGRES_DB: postgres
-    command: 
-      - -N 1000
+    command: ["postgres", "-N", "1000"]
     volumes:
       - ./services/.nogit/rendered/db/init-db-scriprax.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
@@ -49,12 +48,12 @@ services:
       - "127.0.0.1:5000:5000"
     environment:
       # Database Configuration
-      DATABASE_URL: "postgresql://app1_user:App1_P@ssw0rd_2025!@postgres:5432/app1_db"
+      DATABASE_URL: "postgresql://scriprax_user:Sc5t0m_P@ssw0rd_2025!@postgres:5432/scriprax_db"
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: app1_user
-      DB_PASSWORD: App1_P@ssw0rd_2025!
-      DB_NAME: app1_db
+      DB_USER: scriprax_user
+      DB_PASSWORD: Sc5t0m_P@ssw0rd_2025!
+      DB_NAME: scriprax_db
       
       # Application Configuration
       NODE_ENV: production
@@ -71,12 +70,12 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
 
   app1_frontend:
     container_name: app1_frontend
