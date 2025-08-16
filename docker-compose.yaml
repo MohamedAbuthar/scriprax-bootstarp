@@ -43,7 +43,7 @@ services:
 
   app1_backend:
     container_name: app1_backend
-    image: your-registry/app1-backend:latest  # Replace with your backend image
+    image: ghcr.io/kasimmz/child-info:latest
     platform: linux/amd64
     ports:
       - "127.0.0.1:5000:5000"
@@ -58,7 +58,7 @@ services:
       
       # Application Configuration
       NODE_ENV: production
-      CORS_ORIGIN: "https://yourdomain.com"
+      CORS_ORIGIN: "https://api.sciprax.com"
       PORT: 5000
       JWT_SECRET: "your_jwt_secret_here"
       
@@ -80,22 +80,22 @@ services:
 
   app1_frontend:
     container_name: app1_frontend
-    image: your-registry/app1-frontend:latest  # Replace with your frontend image
+    image: ghcr.io/mohamedabuthar/registration-form:latest
     platform: linux/amd64
     ports:
       - "127.0.0.1:3000:3000"
     environment:
       # Frontend Configuration
       NODE_ENV: production
-      NEXT_PUBLIC_BASE_URL: https://yourdomain.com  # Replace with your domain
-      NEXTAUTH_URL: https://yourdomain.com
+      NEXT_PUBLIC_BASE_URL: https://api.sciprax.com
+      NEXTAUTH_URL: https://api.sciprax.com
       NEXTAUTH_URL_INTERNAL: http://app1_frontend:3000
       NEXTAUTH_TRUST_HOST: "true"
       NEXTAUTH_SECRET: your_nextauth_secret_here
       
       # API Configuration
-      REACT_APP_API_URL: https://yourdomain.com/api
-      REACT_APP_BACKEND_URL: https://yourdomain.com/api
+      REACT_APP_API_URL: https://api.sciprax.com/api
+      REACT_APP_BACKEND_URL: https://api.sciprax.com/api
       PORT: 3000
       
       # Add your other frontend environment variables here
@@ -107,19 +107,19 @@ services:
 
   app2_frontend:
     container_name: app2_frontend
-    image: your-registry/app2-frontend:latest  # Replace with your second frontend image
+    image: ghcr.io/kasimmz/child-dashboard:latest
     platform: linux/amd64
     ports:
       - "127.0.0.1:4000:4000"
     environment:
       # Frontend Configuration
       NODE_ENV: production
-      NEXT_PUBLIC_BASE_URL: https://app2.yourdomain.com  # Replace with your subdomain
+      NEXT_PUBLIC_BASE_URL: https://admin.sciprax.com
       PORT: 4000
       
       # API Configuration - points to the same backend
-      REACT_APP_API_URL: https://yourdomain.com/api
-      REACT_APP_BACKEND_URL: https://yourdomain.com/api
+      REACT_APP_API_URL: https://api.sciprax.com/api
+      REACT_APP_BACKEND_URL: https://api.sciprax.com/api
       
       # Add your other frontend environment variables here
       # REACT_APP_FEATURE_FLAGS: "feature1,feature2"
