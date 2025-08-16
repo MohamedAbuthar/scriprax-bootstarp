@@ -51,7 +51,7 @@ services:
       DATABASE_URL: "postgresql://scriprax_user:Sc5t0m_P@ssw0rd_2025!@postgres:5432/scriprax_db"
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: scriprax_user
+      DB_USERNAME: scriprax_user
       DB_PASSWORD: Sc5t0m_P@ssw0rd_2025!
       DB_NAME: scriprax_db
       
