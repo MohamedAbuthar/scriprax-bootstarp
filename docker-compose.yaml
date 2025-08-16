@@ -8,8 +8,8 @@ services:
       APP1_FRONTEND: http://app1_frontend:3000
       APP2_FRONTEND: http://app2_frontend:4000
     volumes:
-      - ./services/predefined/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
-      - ./services/predefined/nginx/ssl:/etc/nginx/ssl
+      - ./services/predefined/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./services/predefined/ssl:/etc/nginx/ssl:ro
     ports:
       - "80:80"
       - "443:443"
@@ -67,15 +67,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    extra_hosts:
-      - host.docker.internal:host-gateway
     restart: unless-stopped
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 40s
 
   app1_frontend:
     container_name: app1_frontend
