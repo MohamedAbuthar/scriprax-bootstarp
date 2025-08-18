@@ -86,14 +86,7 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     environment:
-      NODE_ENV: production
-      NEXT_PUBLIC_BASE_URL: https://api.sciprax.com
-      NEXTAUTH_URL: https://api.sciprax.com
-      NEXTAUTH_URL_INTERNAL: http://app1_frontend:3000
-      NEXTAUTH_TRUST_HOST: "true"
-      NEXTAUTH_SECRET: your_nextauth_secret_here
-      REACT_APP_API_URL: https://api.sciprax.com/api
-      REACT_APP_BACKEND_URL: https://api.sciprax.com/api
+      NEXT_PUBLIC_API_BASE_URL: https://api.sciprax.com/api/children
       PORT: 3000
     depends_on:
       - app1_backend
@@ -107,7 +100,7 @@ services:
       - "127.0.0.1:4000:4000"
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_BASE_URL: https://admin.sciprax.com
+      NEXT_PUBLIC_API_BASE_URL: https://api.sciprax.com/api/children
       PORT: 4000
       REACT_APP_API_URL: https://api.sciprax.com/api
       REACT_APP_BACKEND_URL: https://api.sciprax.com/api
