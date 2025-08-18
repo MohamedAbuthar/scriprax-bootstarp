@@ -12,6 +12,8 @@ services:
     volumes:
       - ./services/predefined/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
       - ./services/predefined/nginx/ssl:/etc/nginx/ssl
+      - ./uploads/videos:/app/videos:ro
+      - ./uploads/screenshots:/app/screenshots:ro
     ports:
       - "80:80"
       - "443:443"

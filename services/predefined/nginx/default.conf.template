@@ -74,6 +74,41 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+        location /videos/ {
+        alias /app/videos/;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        add_header X-Content-Type-Options nosniff;
+        
+        # Security: Only allow specific video formats
+        location ~* \.(mp4|avi|mov|wmv|flv|webm|mkv)$ {
+            add_header Content-Disposition 'inline';
+        }
+        
+        # Deny access to other file types
+        location ~ \. {
+            deny all;
+        }
+    }
+
+    # Static screenshot files
+    location /screenshots/ {
+        alias /app/screenshots/;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        add_header X-Content-Type-Options nosniff;
+        
+        # Security: Only allow specific image formats
+        location ~* \.(jpg|jpeg|png|gif|webp)$ {
+            add_header Content-Disposition 'inline';
+        }
+        
+        # Deny access to other file types
+        location ~ \. {
+            deny all;
+        }
+    }
     
     # Static files for main frontend (with caching)
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
