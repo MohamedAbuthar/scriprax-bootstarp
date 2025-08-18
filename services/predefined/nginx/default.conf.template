@@ -51,7 +51,7 @@ server {
     # API routes for main app → backend
     location /api/ {
         client_max_body_size 50M;
-        proxy_pass ${APP1_BACKEND}/;
+        proxy_pass ${APP1_BACKEND};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -133,7 +133,7 @@ server {
     # Admin API routes → same backend (if admin needs backend access)
     location /api/ {
         client_max_body_size 50M;
-        proxy_pass ${APP1_BACKEND}/;
+        proxy_pass ${APP1_BACKEND};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
