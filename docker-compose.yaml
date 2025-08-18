@@ -50,15 +50,18 @@ services:
       - "127.0.0.1:5000:5000"
     environment:
       DATABASE_URL: "postgresql://scriprax_user:Sc5t0m_P@ssw0rd_2025!@postgres:5432/scriprax_db"
-      # ...existing environment variables...
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: scriprax_user
+      DB_PASSWORD: Sc5t0m_P@ssw0rd_2025!
+      DB_DATABASE: scriprax_db
+      NODE_ENV: production
+      CORS_ORIGIN: "https://api.sciprax.com"
+      PORT: 5000
     volumes:
-      - type: bind
-        source: ./uploads/videos
-        target: /app/videos
-      - type: bind
-        source: ./uploads/screenshots
-        target: /app/screenshots
-    user: "1000:1000"  # Add this line
+      - ./uploads/videos:/app/videos
+      - ./uploads/screenshots:/app/screenshots
+    user: "1000:1000"
     depends_on:
       postgres:
         condition: service_healthy
